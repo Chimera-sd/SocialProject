@@ -15,6 +15,12 @@ let UserSchema = new schema({
         required : true,
         minlength : 1
     },
+    profileName :{
+        type : String,
+        trim : true,
+        required : true,
+        minlength : 1
+    },
     email :{
         type : String,
         required : true ,
@@ -95,7 +101,12 @@ UserSchema.statics.findByToken = function (token) {
     });
   };
 
-
+  UserSchema.statics.findByprofileName = function(name){
+    let User = this;
+    return User.findOne({
+        name
+      });
+  }
 
 
 

@@ -1,10 +1,9 @@
 let {User} = require('../modules/User');
 
-let authenticate = (req, res, next) => {
+let authHome = (req, res, next) => {
   
   let token = req.body.token
 
-  console.log(token)
 
   User.findByToken(token).then((user) => {
     
@@ -21,4 +20,4 @@ let authenticate = (req, res, next) => {
   });
 };
 
-module.exports = {authenticate};
+module.exports = {authHome};

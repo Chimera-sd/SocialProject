@@ -21,17 +21,19 @@ router.post('/register', (req,res)=>{
           if(user){
               return res.status(400).json({'email':`${req.body.email} already exsists`})
           }
-          
+          let arrEmail = req.body.email.split("@");
+          let profileName = arrEmail[0];
           const avatar = gravatar.url(req.body.email , {
               s: 200,
               r : 'pg',
               d:'mm'
           }) 
           const newUser = new User({
+            name :req.body.name,
             email : req.body.email,
+            profileName,
             password : req.body.password,
-            avatar ,
-            name :req.body.name 
+            avatar  
           })
           newUser.save().then(()=>{
               return newUser.genrateAuthToken();
