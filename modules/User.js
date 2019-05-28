@@ -78,27 +78,30 @@ UserSchema.pre('save',function(next){
     }
 })
 
-UserSchema.statics.findByToken = function(token){
-    let user =this;
-    let decoded ;
-    try{
-        decoded = jwt.verify(token,secret);
-    }catch(e){
-        return Promise.reject();
+UserSchema.statics.findByToken = function (token) {
+    let User = this;
+    let decoded;
+  
+    try {
+      decoded = jwt.verify(token, secret);
+    } catch (e) {
+      return Promise.reject();
     }
+  
     return User.findOne({
-        '_id' : decoded._id,
-        access : 'auth',
-        'tokens.token' : token
-    })
-}
-
+      '_id': decoded._id,
+      'tokens.token': token,
+      'tokens.access': 'auth'
+    });
+  };
 
 
 
 
 
 let User =mongoose.model('User' , UserSchema)
+
+
 module.exports= {
     User 
 }

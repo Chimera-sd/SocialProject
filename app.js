@@ -2,11 +2,12 @@ let express = require('express');
 let mongoose = require('mongoose');
 let bodyparser = require('body-parser')
 
-let {urlAtlas,urlLocal} = require(`./config/obj.js`)
+
+let {urlAtlas} = require(`./config/obj.js`)
 let user = require('./routes/api/user')
 let posts = require('./routes/api/posts')
 let profile = require('./routes/api/profile')
-
+let {authenticate} = require('./middleware/authenticate')
 
 let app = express();
 let port = 3000 || process.env.PORT;
@@ -20,7 +21,7 @@ app.use('/api/profile',profile);
 
 mongoose.Promise = global.Promise
 mongoose
-    .connect(urlAtlas)
+    .connect(urlAtlas,{useNewUrlParser : true})
     .then(()=>console.log('Atlas DB connected '))
     .catch((err)=>{
       console.log(err)
@@ -30,10 +31,8 @@ mongoose
 //@desc     Root
 //@access   Puplic
     
-app.get('/',(req,res)=>{
-    res.json({
-        'msg' : "from get root"
-    })
+app.get('/',authenticate,(req,res)=>{
+    res.send("user")
 })
 
 

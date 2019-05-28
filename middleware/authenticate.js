@@ -1,12 +1,14 @@
-let {Profile} = require('../modules/Profile');
+let {User} = require('../modules/User');
 
 let authenticate = (req, res, next) => {
-  let token = req.body.authToken
+  
+  let token = req.body.token
 
-  if(!token){
-      
-  }
+  console.log(token)
+
   User.findByToken(token).then((user) => {
+    
+    console.log(user)
     if (!user) {
       return Promise.reject();
     }
@@ -15,7 +17,7 @@ let authenticate = (req, res, next) => {
     req.token = token;
     next();
   }).catch((e) => {
-    res.status(401).send();
+    res.status(200).send("visitor");
   });
 };
 
