@@ -3,6 +3,7 @@ let mongoose = require('mongoose');
 let bodyparser = require('body-parser')
 
 
+
 let {urlAtlas,urlLocal} = require(`./config/obj.js`)
 let user = require('./routes/api/user')
 let posts = require('./routes/api/posts')

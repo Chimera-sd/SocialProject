@@ -1,10 +1,10 @@
 const express = require('express')
-const router = express.Router();
-const gravatar = require('gravatar');
-const bcrypt = require('bcryptjs');
+const router = express.Router()
+const gravatar = require('gravatar')
+const bcrypt = require('bcryptjs')
 const _ = require('lodash')
 
-let {User} = require('../../modules/User');
+let {User} = require('../../modules/User')
 
 router.get('/',(req,res)=>{
     res.json({'msg':'user works'})
@@ -21,7 +21,7 @@ router.post('/register', (req,res)=>{
           if(user){
               return res.status(400).json({'email':`${req.body.email} already exsists`})
           }
-          let arrEmail = req.body.email.split("@");
+          let arrEmail = req.body.email.split("@")
           let profileName = arrEmail[0];
           const avatar = gravatar.url(req.body.email , {
               s: 200,
@@ -39,7 +39,7 @@ router.post('/register', (req,res)=>{
               return newUser.genrateAuthToken();
           }).then((token)=>res.send(newUser))
           .catch((err)=>{
-              console.log(err);
+            res.send(err)
           }) 
       })
 })

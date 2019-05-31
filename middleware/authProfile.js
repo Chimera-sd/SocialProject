@@ -1,22 +1,41 @@
 let {User} = require('../modules/User');
+let _ = require('lodash')
 
-let authProfile = (req, res, next) => {
+
+
+let authProfile ={ 
+  checkToken : (req, res, next) => {
   
-  let token = req.body.token
+      let token = req.body.token
+      // let {profileName} = req.params
+  
+      User.findByToken(token)
+        .then((user) => {
+        if (!user) {
+          return Promise.reject();
+        }
+        req.user = user;
+        req.token = token;
+        next();
+      }).catch((e) => {
+        next()
+      })
+},
+  sendID:(req, res, next) => {
 
-  User.findByToken(token).then((user) => {
-    
+    let {profileName} = req.params
 
-    if (!user) {
-      return Promise.reject();
-    }
-
-    req.user = user;
-    req.token = token;
-    next();
-  }).catch((e) => {
-    res.status(200).send("visitor");
-  });
-};
+    User.findOne({profileName}).then((user)=>{
+      if(!user){
+        return Promise.reject()
+      }
+      req.id = _.pick(user,["_id"])._id
+    }).catch((e)=>{
+      res.status(404).json({"msg":"profile not found"})
+    })
+  }
+}
 
 module.exports = {authProfile};
+
+

@@ -7,7 +7,8 @@ const Schema = mongoose.Schema
 let profileSchema = new Schema({
     user :{
         type : Schema.Types.ObjectId,
-        ref : 'user'
+        ref : 'User',
+        required : true
     },
     handle : {
         type : String,
@@ -23,7 +24,7 @@ let profileSchema = new Schema({
         trim : true
     },
     website : {
-        type : URL ,
+        type : String ,
         trim : true ,
         validate : {
             validator :(value)=> validator.isURL(value)
@@ -68,26 +69,44 @@ let profileSchema = new Schema({
             }
         }
     ],
-    social :{
+    social :[{
         facebook :{
             type : String 
+            ,validate : {
+                validator :(value)=> validator.isURL(value)
+            }
         },
         instagram :{
             type : String 
+            ,validate : {
+                validator :(value)=> validator.isURL(value)
+            }
         },
         twitter :{
             type : String 
+            ,validate : {
+                validator :(value)=> validator.isURL(value)
+            }
         },
         linkedIn :{
             type : String 
+            ,validate : {
+                validator :(value)=> validator.isURL(value)
+            }
         },
         github :{
-            type : String 
+            type : String
+            ,validate : {
+                validator :(value)=> validator.isURL(value)
+            } 
         },
         youtube :{
             type : String 
+            ,validate : {
+                validator :(value)=> validator.isURL(value)
+            }
         }
-    },
+    }],
     date : {
         type  : Date,
         default : Date.now()

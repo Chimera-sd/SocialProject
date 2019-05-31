@@ -7,7 +7,6 @@ let authHome = (req, res, next) => {
 
   User.findByToken(token).then((user) => {
     
-    console.log(user)
     if (!user) {
       return Promise.reject();
     }
