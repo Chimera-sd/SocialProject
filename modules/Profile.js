@@ -17,11 +17,13 @@ let profileSchema = new Schema({
     },
     company : {
         type : String , 
-        trim : true
+        trim : true,
+        default : ' ',
     },
     location :{
         type : String , 
-        trim : true
+        trim : true,
+        default : ' ',
     },
     website : {
         type : String ,
@@ -47,13 +49,16 @@ let profileSchema = new Schema({
     education : [
         {
             school :{
-                type : String 
+                type : String, 
+                default : " "
             },
             degree :{
-                type : String
+                type : String, 
+                default : " "
             },
             filedOfStudy :{
-                type : String
+                type : String, 
+                default : " "
             },
             from :{
                 type : Date
@@ -62,46 +67,54 @@ let profileSchema = new Schema({
                 type : Date
             },
             current :{
-                type : String
+                type : String, 
+                default : " "
             },
             description :{
-                type : String
+                type : String, 
+                default : " "
             }
         }
     ],
     social :[{
         facebook :{
-            type : String 
+            type : String, 
+            default : "https://www.facebook.com/" 
             ,validate : {
                 validator :(value)=> validator.isURL(value)
             }
         },
         instagram :{
-            type : String 
+            type : String , 
+            default : "https://www.instagram.com/"
             ,validate : {
                 validator :(value)=> validator.isURL(value)
             }
         },
         twitter :{
-            type : String 
+            type : String , 
+            default : "https://www.twitter.com/"
             ,validate : {
                 validator :(value)=> validator.isURL(value)
             }
         },
         linkedIn :{
-            type : String 
+            type : String , 
+            default : "https://www.linkedin.com/"
             ,validate : {
                 validator :(value)=> validator.isURL(value)
             }
         },
         github :{
-            type : String
+            type : String, 
+            default : "https://github.com/"
             ,validate : {
                 validator :(value)=> validator.isURL(value)
             } 
         },
         youtube :{
-            type : String 
+            type : String , 
+            default : "https://www.youtube.com/"
             ,validate : {
                 validator :(value)=> validator.isURL(value)
             }
