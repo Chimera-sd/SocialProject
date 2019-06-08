@@ -1,23 +1,39 @@
-let express = require('express');
-let mongoose = require('mongoose');
-let bodyparser = require('body-parser')
-
+const express = require('express')
+const mongoose = require('mongoose')
+const bodyparser = require('body-parser')
+const helmet = require('helmet')
+const morgan = require('morgan')
+const passport = require('passport')
+const cookieParser = require('cookie-parser')
 
 
 let {urlAtlas,urlLocal} = require(`./config/obj.js`)
-let user = require('./routes/api/user')
-let posts = require('./routes/api/posts')
-let profile = require('./routes/api/profile')
+let user = require('./routes/user')
+let posts = require('./routes/posts')
+let profile = require('./routes/profile')
 let {authHome} = require('./middleware/authHome')
+
 
 let app = express();
 let port = 3000 || process.env.PORT;
 
+
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({extended :false}))
-app.use('/api/user',user);
-app.use('/api/posts',posts);
-app.use('/api/profile',profile);
+app.use(helmet())
+app.use(morgan('tiny'))
+app.use(passport.initialize())
+app.use(cookieParser())
+
+require('./config/passport')(passport)
+
+app.use('/user',user);
+app.use('/posts',posts);
+app.use('/profile',profile);
+
+
+app.set('view engine','pug')
+app.set('views','./views')
 
 
 mongoose.Promise = global.Promise
@@ -33,7 +49,7 @@ mongoose
 //@access   Puplic
     
 app.get('/',authHome,(req,res)=>{
-    res.send("user visit home ")
+    res.render('index',{message : "this is a user"})
 })
 
 

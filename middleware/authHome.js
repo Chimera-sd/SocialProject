@@ -15,7 +15,7 @@ let authHome = (req, res, next) => {
     req.token = token;
     next();
   }).catch((e) => {
-    res.status(200).send("visitor");
+    res.status(200).render('index',{message:'this is a vistor'});
   });
 };
 

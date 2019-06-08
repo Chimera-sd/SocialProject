@@ -10,9 +10,8 @@ let profileSchema = new Schema({
         ref : 'User',
         required : true
     },
-    handle : {
-        type : String,
-        maxlength : 40,
+    age:{
+        type : Number,
         required : true
     },
     company : {

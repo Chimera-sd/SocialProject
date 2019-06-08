@@ -3,10 +3,10 @@ const router = express.Router();
 const mongoose = require('mongoose')
 const _ = require('lodash')
 
-let {authProfile} = require('../../middleware/authProfile')
-let {User} = require('../../modules/User')
-let {Profile} = require('../../modules/Profile');
-let {authPersonalProfile} = require('../../middleware/authPersonalProfile')
+let {authProfile} = require('../middleware/authProfile')
+let {User} = require('../modules/User')
+let {Profile} = require('../modules/Profile');
+let {authPersonalProfile} = require('../middleware/authPersonalProfile')
 
 //@route  GET /:profile 
 //@desc   Find user
@@ -73,6 +73,10 @@ router.post('/:profileName',
             res.send(err)
         })
 })
+
+//@route  POST /:profile/ 
+//@desc   ChangeProfileSttings
+//@access Privte
 
 
 

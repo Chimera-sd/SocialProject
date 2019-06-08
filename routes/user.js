@@ -3,9 +3,11 @@ const router = express.Router()
 const gravatar = require('gravatar')
 // const bcrypt = require('bcryptjs')
 const _ = require('lodash')
+const passport = require('passport')
 
-let {User} = require('../../modules/User')
-let {authHome} = require('../../middleware/authHome')
+
+let {User} = require('../modules/User')
+let {authHome} = require('../middleware/authHome')
 
 router.get('/',(req,res)=>{
     res.json({'msg':'user works'})
@@ -16,32 +18,35 @@ router.get('/',(req,res)=>{
 //@access Puplic
 
 router.post('/register', (req,res)=>{
-    
-    User.findOne({email : req.body.email})
+    let body = _.pick(req.body, ['name','email', 'password'])
+
+    User.findOne({email : body.email})
       .then((user)=>{
           if(user){
-              return res.status(400).json({'email':`${req.body.email} already exsists`})
+              return res.status(400).json({'email':`${body.email} already exsists`})
           }
-          let arrEmail = req.body.email.split("@")
+          let arrEmail = body.email.split("@")
           let profileName = arrEmail[0];
-          const avatar = gravatar.url(req.body.email , {
+          const avatar = gravatar.url(body.email , {
               s: 200,
               r : 'pg',
               d:'mm'
           }) 
           const newUser = new User({
-            name :req.body.name,
-            email : req.body.email,
+            name : body.name,
+            email :body.email,
             profileName,
-            password : req.body.password,
+            password : body.password,
             avatar  
           })
           newUser.save().then(()=>{
               return newUser.genrateAuthToken();
           }).then((token)=>res.send(newUser))
           .catch((err)=>{
-            res.send(err)
+            res.status(400).send(err)
           }) 
+      }).catch((e)=>{
+        res.status(401).send('invalid information')  
       })
 })
 
@@ -51,9 +56,10 @@ router.post('/register', (req,res)=>{
 
 router.post('/login', (req,res)=>{
     let body = _.pick(req.body,['email','password']);
-    User.findByCerdentials(body.email,body.password).then((user)=>{
+    console.log(body)
+    User.findByCredentials(body.email,body.password).then((user)=>{
         return user.genrateAuthToken().then((token)=>{
-            res.status(200).json({token},user)
+        res.status(200).json({token,user})
         })
     }).catch((e)=>{
         res.status(400).json({'msg':"invalid user or password"})
@@ -83,10 +89,31 @@ router.post('/login', (req,res)=>{
 
 router.delete('/logout',authHome,(req,res)=>{
     req.user.removeToken(req.token).then(() => {
-        res.status(200).send();
+        res.status(200).send("logout sucess");
       }, () => {
         res.status(400).send();
       })
+})
+
+
+router.get('/auth/facebook', passport.authenticate('facebook', {scope: ['email']}));
+
+router.get('/auth/facebook/callback', 
+    passport.authenticate('facebook', { successRedirect: '/profile',failureRedirect: '/' }))
+
+// router.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}))
+
+// router.get('/auth/google/callback', 
+//     passport.authenticate('google', { successRedirect: '/profile',failureRedirect: '/' }))
+
+router.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] }))
+
+router.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/')
 })
 
 module.exports = router;

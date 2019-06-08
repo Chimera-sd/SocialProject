@@ -9,51 +9,84 @@ let {secret} = require('../config/obj.js')
 const schema = mongoose.Schema
 
 let UserSchema = new schema({
-  name :{
-      type : String,
-      trim : true,
-      required : true,
-      minlength : 1
-  },
-  profileName :{
-      type : String,
-      trim : true,
-      required : true,
-      minlength : 1
-  },
-  email :{
-      type : String,
-      required : true ,
-      minlength : 6,
-      trim : true,
-      validate :{
-          validator:(value)=> validator.isEmail(value)
-      }  
-  },
-  password :{
-      type : String,
-      required : true ,
-      minlength : 6,
-      trim : true,
-  },
-  avatar :{
-      type : String ,
-      required : true
-  },
-  tokens: [{
-      access: {
-        type: String,
-        required: true
-      },
-      token: {
-        type: String,
-        required: true
-      }
-    }],
-  date : {
-      type : Date ,
-      default : Date.now
-  }
+  // local : {
+        name :{
+            type : String,
+            trim : true,
+            required : true,
+            minlength : 1
+        },
+        profileName :{
+            type : String,
+            trim : true,
+            required : true,
+            minlength : 1
+        },
+        email :{
+            type : String,
+            required : true ,
+            minlength : 6,
+            trim : true,
+            validate :{
+                validator:(value)=> validator.isEmail(value)
+            }  
+        },
+        password :{
+            type : String,
+            required : true ,
+            minlength : 6,
+            trim : true,
+        },
+        avatar :{
+            type : String ,
+            required : true
+        },
+        tokens: [{
+            access: {
+              type: String,
+              required: true
+            },
+            token: {
+              type: String,
+              required: true
+            }
+          }],
+        date : {
+            type : Date ,
+            default : Date.now
+        }
+  // },
+  // facebook :{
+  //       name :{
+  //         type : String,
+  //         trim : true,
+  //         required : true,
+  //         minlength : 1
+  //         },
+  //       profileName :{
+  //         type : String,
+  //         trim : true,
+  //         required : true,
+  //         minlength : 1
+  //       },
+  //       email :{
+  //         type : String,
+  //         required : true ,
+  //         minlength : 6,
+  //         trim : true,
+  //         validate :{
+  //             validator:(value)=> validator.isEmail(value)
+  //         }  
+  //       },
+  //       avatar :{
+  //         type : String ,
+  //         required : true
+  //       },
+  //       token : {
+  //         type : String ,
+  //         required : true
+  //       }
+  // }
 })
 
 UserSchema.methods.genrateAuthToken= function(){
@@ -65,6 +98,7 @@ UserSchema.methods.genrateAuthToken= function(){
   let token = jwt.sign({'_id' : user._id.toHexString(),access},secret).toString();
   user.tokens.splice(1,0,{access, token});
   return user.save().then(() => {
+ 
       return token
     })
 }
