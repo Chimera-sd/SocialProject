@@ -4,7 +4,7 @@ const validator = require('validator')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
-let {secret} = require('../config/obj.js')
+let {secret} = require('../config/DB.js')
 
 const schema = mongoose.Schema
 

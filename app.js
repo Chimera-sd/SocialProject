@@ -7,7 +7,7 @@ const passport = require('passport')
 const cookieParser = require('cookie-parser')
 
 
-let {urlAtlas,urlLocal} = require(`./config/obj.js`)
+let {urlAtlas,urlLocal} = require(`./config/DB.js`)
 let user = require('./routes/user')
 let posts = require('./routes/posts')
 let profile = require('./routes/profile')
