@@ -4,6 +4,7 @@ const validator = require('validator')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
+
 let {secret} = require('../config/DB.js')
 
 const schema = mongoose.Schema
@@ -11,50 +12,68 @@ const schema = mongoose.Schema
 let UserSchema = new schema({
   // local : {
         name :{
-            type : String,
+            type : 'string',
             trim : true,
             required : true,
-            minlength : 1
+            minlength : 1,
+            unique : true
         },
         profileName :{
-            type : String,
+            type : 'string',
             trim : true,
             required : true,
-            minlength : 1
+            minlength : 1,
+            unique : true
         },
         email :{
-            type : String,
+            type : 'string',
             required : true ,
             minlength : 6,
             trim : true,
             validate :{
                 validator:(value)=> validator.isEmail(value)
-            }  
+            }  ,
+            unique : true
         },
         password :{
-            type : String,
-            required : true ,
+            type :'string',
+            // required : true ,
             minlength : 6,
             trim : true,
         },
         avatar :{
-            type : String ,
-            required : true
+            type : 'string' ,
+            required : true,
+            default : "//www.gravatar.com/avatar/9d60a59d663de6d50164d8efe76483fc?s=200&r=pg&d=mm"
         },
         tokens: [{
             access: {
-              type: String,
+              type: 'string',
               required: true
             },
             token: {
-              type: String,
+              type: 'string',
               required: true
             }
           }],
         date : {
             type : Date ,
             default : Date.now
+        },
+        email_verified: 'Boolean',
+        googleID: {
+            type: 'string',
+            required: false
+        },
+        photo: {
+            type: 'string',
+            required: false,
+        },
+        facebookID:{
+          type: 'string',
+          required: false
         }
+
   // },
   // facebook :{
   //       name :{

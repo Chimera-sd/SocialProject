@@ -13,6 +13,10 @@ router.get('/',(req,res)=>{
     res.json({'msg':'user works'})
 })
 
+router.get('/login',(req,res)=>{
+  res.json({'msg':'user login'})
+})
+
 //@route  Post api/register 
 //@desc   Register user
 //@access Puplic
@@ -99,7 +103,7 @@ router.delete('/logout',authHome,(req,res)=>{
 router.get('/auth/facebook', passport.authenticate('facebook', {scope: ['email']}));
 
 router.get('/auth/facebook/callback', 
-    passport.authenticate('facebook', { successRedirect: '/profile',failureRedirect: '/' }))
+    passport.authenticate('facebook', { successRedirect: '/user/login',failureRedirect: '/' ,session: false}))
 
 // router.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}))
 
@@ -107,13 +111,21 @@ router.get('/auth/facebook/callback',
 //     passport.authenticate('google', { successRedirect: '/profile',failureRedirect: '/' }))
 
 router.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] }))
+  passport.authenticate('google', { scope: ['profile', 'email'] }, {
+    session: false
+  }))
 
+// router.get('/auth/google/callback', 
+//   passport.authenticate('google', { failureRedirect: '/user/login' }),
+//   function(req, res) {
+//     // Successful authentication, redirect home.
+//     res.redirect('/')
+// })
 router.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  passport.authenticate('google', { failureRedirect: '/user/login' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    res.redirect('/')
-})
+    res.redirect('/');
+  });
 
 module.exports = router;
